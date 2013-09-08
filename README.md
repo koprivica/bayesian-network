@@ -1,6 +1,6 @@
 # bayesian-network
 
-A Clojure library designed to ... well, that part is up to you.
+A Clojure project designed as Bayesian network.
 
 ## Usage
 
