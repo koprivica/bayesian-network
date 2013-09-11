@@ -9,3 +9,8 @@
   "This is Marko's function"
   [x y]
   (zipmap x y))
+
+(defn markova-druga-funkcija
+  "This is Marco's second function"
+  [m]
+  (apply str m))
