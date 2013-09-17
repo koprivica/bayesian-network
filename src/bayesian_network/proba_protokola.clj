@@ -33,3 +33,16 @@
   "Create a vector of h w-item vectors."
   [h w]
   (vec (repeat h (vec (repeat w nil)))))
+
+(deftype SchrodingerCat [^:unsynchronized-mutable state]
+  clojure.lang.IDeref
+  (deref [sc]
+    (locking sc
+      (or state
+          (set! state (if (zero? (rand-int 2))
+                  :dead
+                  :alive))))))
+
+(defrecord MarkovCvor
+    [x]
+    )
