@@ -1,9 +1,10 @@
 (ns bayesian-network.test-belief
-  (:require (incanter [core :refer :all]
-             [charts :refer :all]
-             [stats :refer :all])))
-
-(Comment        OVO JE SKUP SVIH MOGUCIH STANJA MREZE            )
+;  (:require (incanter [core :refer :all]
+ ;                     [charts :refer :all]
+  ;                    [stats :refer :all]
+;  )))
+  )
+ ;(comment        OVO JE SKUP SVIH MOGUCIH STANJA MREZE            )
 (def GGG {:stanje :m})
 (def DDD {:stanje :d})
 (def RRR {:stanje :r})
@@ -17,13 +18,13 @@
           [{:stanje :f} {:stanje :nd} {:stanje :nr}]
           ])
 
-(comment        VEROVATNOCE ZA CVOR 1            )
+;(comment        VEROVATNOCE ZA CVOR 1            )
 (defn G1 [u] (let [m1 (first u)] (cond
                (=  (:stanje m1) :m) 0.5
                (= (:stanje m1) :f) 0.5
                :else 0)))
 
-(comment        VEROVATNOCE ZA CVOR 2            )
+;(comment        VEROVATNOCE ZA CVOR 2            )
 (defn D1 [u] (let [m1 (first u) m2 (second u)]
   (cond
     (= (:stanje m1) :m)
@@ -45,7 +46,7 @@
   )
 )
 
-(comment        VEROVATNOCE ZA CVOR 3            )
+;(comment        VEROVATNOCE ZA CVOR 3            )
 (defn R1 [u] (let [m1 (first u) m2 (second u) m3 (nth u 2)]
   (cond
     (= (:stanje m1) :m)
@@ -89,7 +90,7 @@
   )
 )
 
-(comment        RACUNANJE VEROVATNOCE DA MREZA BUDE U NEKOM STANJU MNOZENJEM VEROVATNOCA CVOROVA           )
+;(comment        RACUNANJE VEROVATNOCE DA MREZA BUDE U NEKOM STANJU MNOZENJEM VEROVATNOCA CVOROVA           )
 (defn Belif [s]
   (if (keyword? (first (first (first (seq s)))))
 
@@ -101,7 +102,7 @@
   )
 )
 
-(comment        OVO JE U TESTIRANJU JER POKUSAVAM DA NACRTAM GRAFIK – NE RADI )
+;(comment        OVO JE U TESTIRANJU JER POKUSAVAM DA NACRTAM GRAFIK – NE RADI )
 ;(defn draw-histogram [s]
  ; (
 
@@ -113,7 +114,7 @@
  ; (view (pie-chart (vec (keys (rasp skup))) (vec (vals (rasp skup)))))
 ;)
 
-(comment        RACUNANJE RASPODELE VEROVATNOCA MREZE  - STARO      )
+;(comment        RACUNANJE RASPODELE VEROVATNOCA MREZE  - STARO      )
  (defn raspodela1 [sekvenca]
                  (loop [my-map {}
                         sek sekvenca]
@@ -122,7 +123,7 @@
                             (next sek))
                      my-map)))
 
- (comment        RACUNANJE RASPODELE VEROVATNOCA MREZE        )
+; (comment        RACUNANJE RASPODELE VEROVATNOCA MREZE        )
  (defn raspodela [sekvenca]
                                 (loop [my-map {}
                                        sek sekvenca]
