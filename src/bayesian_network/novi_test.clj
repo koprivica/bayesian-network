@@ -3,3 +3,6 @@
   )
 
 (defrecord Node [node-name node-state node-parents])
+
+(defprotocol NodeDriving
+  (probability [node forebears]))
