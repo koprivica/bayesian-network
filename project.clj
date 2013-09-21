@@ -3,5 +3,6 @@
   :url "http://example.com/FIXME"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
+  :source ["src/"]
   :dependencies [[org.clojure/clojure "1.5.1"] [incanter "1.5.2"]]
   :main bayesian-network.core)

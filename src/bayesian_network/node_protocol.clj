@@ -2,10 +2,10 @@
  ; (:use [incanter core charts stats])
   )
 ; Node hase name, possiable states and parents
-(defrecord Node [node-name node-parents node-probabilies])
+(defrecord Node [node-name node-parents node-probabilities])
 
-; Node with out parents -> input node
-(defrecord InputNode [node-name node-probabilies])
+; Node without parents -> input node
+(defrecord InputNode [node-name node-probabilities])
 
 
 ; Protocol with node methods
@@ -21,23 +21,21 @@
   Node
   (node-probability [node network-state]
 
-     ((conj       ; merging node name with names of his parents,
+    ((:node-probabilities node)   ; map of possible probabilities
+     (conj       ; merging node name with names of his parents,
                   ;result set is key for node-probabilities map - > value of that map is probability
         (into
            #{}
-           (map #(% network-state) (seq (:node-parents node))))
-        ((:node-name node) network-state))
-
-     node-probabilies)
+           (map #(network-state %) (seq (:node-parents node))))
+        (network-state (:node-name node))))
     )
 
   (node-current-state [node])
 
   InputNode
   (node-probability [node network-state]
-    (((:node-name node) network-state)     ;key, state of a node
-                (:node-probabilies node))  ;map of possible probabilities, result map value is node probability
+    ((network-state (:node-name node))     ;key, state of a node
+                (:node-probabilities node))  ;map of possible probabilities, result map value is node probability
     )
 
-  (node-current-state [node])
- )
+  (node-current-state [node]))
