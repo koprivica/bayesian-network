@@ -1,5 +1,12 @@
 (ns bayesian-network.core
-  (:require [bayesian-network.node-protocol]))
+  (:require ; [bayesian-network.node-protocol :refer [->Node ->InputNode]]
+            [bayesian-network.node-protocol :refer
+              :all]   ;SUPER chatch, dealing with import record problem
+  ; [bayesian-network.node-protocol]
+            )
+  (gen-class)
+ ; (:import [bayesian-network.node-protocol Node] [bayesian-network.node-protocol InputNode])
+  )
 
  ;  calculating probability function
  (defn network-probability [network network-state]
