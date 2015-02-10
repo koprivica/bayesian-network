@@ -1,28 +1,28 @@
 (ns bayesian-network.thinkbayes)
 
-(defn setMapValues [m x y]
-  (conj m (hash-map x y)))
+(defn set-map-values [m key-x value-y]
+  (conj m (hash-map key-x value-y)))
 
 
-(defn setValues
-  ([a x]
-  (setValues a x 0))
+(defn set-array-values
+  ([array-a position-x]
+  (set-array-values array-a position-x 0))
 
- ([a x y]
-  (assoc a x y)))
+ ([array-a position-x value-y]
+  (assoc array-a position-x value-y)))
 
-(defn multProb [a x fact]
-  (setValues a x (* (a x) fact)))
+(defn multiply-array-probability [array-a position-x multuplay-factor]
+  (set-array-values array-a position-x (* (array-a position-x) multuplay-factor)))
 
-(defn totalSum [a]
-  (reduce * a))
+(defn total-array-sum [array-a]
+  (reduce + array-a))
 
-(defn Prob [a x]
-  (if (a x) (a x) 0))
+(defn probabily-array [array-a position-x]
+  (if (array-a position-x) (array-a position-x) 0))
 
-(defn Normalize [a f]
-  (let [ff (or f 1.0)
-        total (totalSum a)
+(defn normalize-array [array-a fraction-f]
+  (let [ff (or fraction-f 1.0)
+        total (total-array-sum array-a)
         factor (/ ff total)]
-    (map (partial * factor) a)
-  ))
+    (map (partial * factor) array-a)
+    ) )
