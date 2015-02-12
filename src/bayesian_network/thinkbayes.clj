@@ -1,8 +1,45 @@
 (ns bayesian-network.thinkbayes)
 
-(defn set-map-values [m key-x value-y]
+(defn add-map-values [m key-x value-y]
   (conj m (hash-map key-x value-y)))
 
+(defn set-map-values
+  ([m key-x]
+   (set-map-values m key-x 0))
+
+  ([m key-x value-y]
+   (assoc m key-x value-y)))
+
+(defn multiply-map-probability [m key-x multiply-factor]
+  (set-map-values m key-x (* (key-x m) multiply-factor)))
+
+
+(defn total-map-sum [m]
+  (reduce + (vals m)))
+
+(defn probabily-map [m key-x]
+  (key-x m))
+
+(defn normalize-map
+  ([m] (normalize-map m nil))
+
+  ([m fraction]
+  (let [ff (or fraction 1.0)
+        total (total-map-sum m)
+         factor (/ ff total)]
+    (reduce #(update-in % [%2] (partial * factor)) m (keys m))
+    )))
+
+
+(defn likelihod [m array-key]
+  (array-key m)
+  )
+
+(defn update-map [m l key-x]
+ (normalize-map (#(update-in % [%2] (partial * (likelihod %3 %2))) m key-x l))
+)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;    Array attempt    ;;;;;;;;;;;;;;;;;;;;;
 
 (defn set-array-values
   ([array-a position-x]
