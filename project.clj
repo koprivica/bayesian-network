@@ -4,5 +4,5 @@
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :source ["src/"]
-  :dependencies [[org.clojure/clojure "1.5.1"] [incanter "1.5.2"]]
-  :main bayesian-network.thinkbayes)
+  :dependencies [[org.clojure/clojure "1.6.0"] [incanter "1.5.6"] [org.clojure/math.numeric-tower "0.0.4"]]
+  :main bayesian-network.mcmc)
