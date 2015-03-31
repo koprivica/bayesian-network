@@ -1,12 +1,6 @@
 (ns bayesian-network.mcmc)
 (require '(incanter core stats charts io) '[clojure.math.numeric-tower :as numeric-tower])
 
-;(defn gibbs [limit add-up x prior likelihood posterior]
-
-;(if (add-up < limit)
-;  posterior)
-
-;(recur limit (inc add-up)))
 
 
 (defn get-sample
@@ -65,7 +59,7 @@
 
   [prior-fun likelihood-fun algorithm num-samples]
 
-  (loop [i 0
+  (loop [i 1
          cur-theta (prior-fun 1)        ; sampling onece, this can be written better
          prop-theta (prior-fun 1)
          res-samples []]
@@ -99,6 +93,33 @@
     0))
 
 
+(defn gibbs-sampling
+  "Gibbs sampling algorithm for bivariate MCMC.
+  Arguments are as follows:
+  start-1 : Theta-1 starting value
+  start-2 : Theta-2 starting value
+  likelihood-fin : funcion that return sample from marginal functions of boath Thetas
+  num-samples : number of samples required
+  num-thin : number of warming loops before sample is selected"
+  [start-1 start-2 likelihood-fun num-samples num-thin]
+  (loop [i 1          ;number of samples loops
+         Theta-1 start-1        ; Theta number must be perserved for next sample loop so will be extracted from inner loop result
+         Theta-2 start-2
+         res-samples []]
+    (if (> i num-samples)
+      res-samples
+      (let [thin-result (loop [j 1
+                               Prop-Theta-1 Theta-1
+                               Prop-Theta-2 Theta-2]
+                                (if (> j num-thin)
+                                  [Prop-Theta-1 Prop-Theta-2] ;if thin loop is ended -> return array with theta results
+                                  (let [new-Prop-Theta-1 (likelihood-fun nil Prop-Theta-2)
+                                        new-Prop-Theta-2 (likelihood-fun new-Prop-Theta-1 nil)]
+                                    (recur (inc j) new-Prop-Theta-1 new-Prop-Theta-2))))]
+        (recur (inc i) (thin-result 0) (thin-result 1) (conj res-samples thin-result))))))
+
+
+
 (defn likelihood-example1              ;univariate example
   "g(Theta|y) = 0.8 * e^(-1/2 * Theta^2) + 0.2 * 1/2 e^(-1/(2*2^2) * (Theta-3)^2) "
   [Theta]
@@ -111,6 +132,16 @@
   [[Theta-1 Theta-2]]
   (numeric-tower/expt Math/E (* (- (/ 1 (* 2 (- 1 (numeric-tower/expt 0.9 2))))) (+ (numeric-tower/expt Theta-1 2) (- (* 2 0.9 Theta-1 Theta-2)) (numeric-tower/expt Theta-2 2)))))
 
+(defn likelihood-example-gibbs1
+  "Theta1 = Gamma ->  shape 3, rate 1/(4+Theta2^2)
+  Theta2 = Normal -> mean 1/(1+Theta1), sd 1/sqrt(1+Theta1)"
+   [Theta-1 Theta-2]
+   (if (nil? Theta-1)
+     (incanter.stats/sample-gamma 1 :shape 3 :rate (/ 1 (+ 1 (numeric-tower/expt Theta-2 2))))
+     (incanter.stats/sample-normal 1 :mean (/ 1 (+ 1 Theta-1)) :sd (/ 1 (numeric-tower/sqrt (+ 1 Theta-1))))))
+
+
+
 
 (defn prior-example-uni
   "univariate normal distribution example"
@@ -122,4 +153,4 @@
   "bivariate normal distribution example"
   [n]
   (let [dist (incanter.stats/sample-mvn n :sigma (incanter.core/identity-matrix 2))]
-        (vector (sel dist :cols 0 :rows 0) (sel dist :cols 1 :rows 0))))
+        (vector (incanter.core/sel dist :cols 0 :rows 0) (incanter.core/sel dist :cols 1 :rows 0))))
